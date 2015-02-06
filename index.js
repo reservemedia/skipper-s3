@@ -212,6 +212,8 @@ module.exports = function SkipperS3 (globalOpts) {
       // to `.tmp/s3-upload-part-queue`
       options.tmpdir = options.tmpdir || path.resolve(process.cwd(), '.tmp/s3-upload-part-queue');
 
+      var emitted = false;
+
       var mpu = new S3MultipartUpload({
         objectName: __newFile.fd,
         stream: __newFile,
@@ -228,7 +230,10 @@ module.exports = function SkipperS3 (globalOpts) {
       }, function (err, body) {
         if (err) {
           // console.log(('Receiver: Error writing `' + __newFile.filename + '`:: ' + require('util').inspect(err) + ' :: Cancelling upload and cleaning up already-written bytes...').red);
-          receiver__.emit('error', err);
+          if (emitted === false) {
+            emitted = true;
+            receiver__.emit('error', err);
+          }
           return;
         }
 
