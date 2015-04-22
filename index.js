@@ -187,7 +187,7 @@ module.exports = function SkipperS3 (globalOpts) {
       objectMode: true
     });
 
-    receiver__.once('error', function (err) {
+    receiver__.on('error', function (err) {
       // console.log('ERROR ON RECEIVER__ ::',err);
     });
 
@@ -198,7 +198,7 @@ module.exports = function SkipperS3 (globalOpts) {
 
       var startedAt = new Date();
 
-      __newFile.once('error', function (err) {
+      __newFile.on('error', function (err) {
         // console.log('ERROR ON file read stream in receiver (%s) ::', __newFile.filename, err);
         // TODO: the upload has been cancelled, so we need to stop writing
         // all buffered bytes, then call gc() to remove the parts of the file that WERE written.
